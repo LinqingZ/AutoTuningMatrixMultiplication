@@ -86,7 +86,7 @@ print("thousand times of algorithm 3", timeit.timeit(lambda:algorithm3(matrix_A,
 # mechanism system - store and run quick in next time
 
 
-# data you need to pass into hipBLAS and costumer
+# data you need to pass into hipBLAS and customer
 # python method signature, what data and expectation need in the system, interaction the system below it
 # performance the computation
 
