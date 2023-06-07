@@ -1,0 +1,91 @@
+from abc import ABC, abstractmethod
+
+
+class GemmProvider(ABC):
+	def __init__(self):
+		pass
+		
+	@abstractmethod
+	def get_gemm_implementations(self, gemm_descriptor: GemmDescriptor) -> List[int]
+		...
+	
+	@abstractmethod
+	def execute_gemm(self, tensor_a: Tensor, tensor_b: Tensor, tensor_c: Tensor, gemm_descriptor: GemmDescriptor, gemm_impl: int) -> GemmStatus
+		 ...
+	
+	
+class NumPyGemmProvider(GemmProvider):
+	def __init(self):
+		pass
+		
+	def get_gemm_implementations(self, gemm_descriptor: GemmDescriptor) -> List[int]
+		# implement me
+	
+	def execute_gemm(self, tensor_a: Tensor, tensor_b: Tensor, tensor_c: Tensor,  gemm_descriptor: GemmDescriptor, gemm_impl: int) -> GemmStatus
+		# implement me
+		
+
+class HipblasGemmProvider(GemmProvider):
+	def __init(self):
+		pass
+		
+	def get_gemm_implementations(self, gemm_descriptor: GemmDescriptor) -> List[int]
+		# implement me
+	
+	def execute_gemm(self, tensor_a: Tensor, tensor_b: Tensor, tensor_c: Tensor,  gemm_descriptor: GemmDescriptor, gemm_impl: int) -> GemmStatus
+		# implement me
+
+	
+	
+class Profiler(object):
+	def __init__(self):
+		pass
+		
+	def profile_instances(self, gemm_descriptor: GemmDescriptor, provider: GemmProvider) -> List[Tuple[int, float]]:
+		result = []
+		for gemm_impl in provider.get_gemm_implementations(gemm_descriptor):
+			# initialize tensor_a, tensor_b and tensor_c with random data.
+			
+			start = datetime.datetime.now()
+			# repeat the profiling a few times to get more reliable results
+			provider.execute_gemm(tensor_a, tensor_b, tensor_c, gemm_descriptor, gemm_impl)
+			end = datetime.datetime.now()
+			time_taken = end - start
+			result.append((gemm_impl, time_take))
+			
+		return result
+		
+		
+
+class StatefulOptimizer(object):
+	def __init__(self):
+		self.profile_database = {}
+		
+	def get_best_gemm_impl(self, gemm_descriptor: GemmDescriptor):
+		results = self.profile_database(gemm_descriptor, None)
+		if results is None:
+			return None
+			
+		sorted_results = sorted(results, key=lambda t: t[1])
+		return sorted_results[0]
+		
+	def persist_profile_results(self, gemm_descriptor: GemmDescriptor, results: List[Tuple[int, float]]):
+		self.profile_database[gemm_descriptor] = results
+		
+
+
+class AutotunedGemm(object):
+	def __init__(self):
+		self.optimizer = StatefulOptimizer()
+		self.profiler = Profiler()
+		self.provider = HipblasGemmProvider()
+		
+	def optimized_gemm(self, tensor_a: Tensor, tensor_b: Tensor, tensor_c: Tensor, gemm_descriptor: GemmDescriptor):
+		impl = self.optimizer.get_best_gemm_impl(gemm_descriptor)
+		if impl is None:
+			profile_results = self.profiler.profile_instances(gemm_descriptor, self.provider)
+			self.optimizer.persist_profile_results(gemm_descriptor)
+			impl = self.optimizer.get_best_gemm_impl(gemm_descriptor)
+		
+		return self.provider.execute_gemm(tensor_a, tensor_b, tensor_c, gemm_descriptor, impl)
+			

@@ -56,20 +56,20 @@ def time_function(func, *args):
 # check time of running 1000 times
 def time_thousand_function(func, *args):
     return timeit.timeit(lambda:func(*args), number=1000)
-print("Running time 1")
-print("thousand times of algorithm 1",time_thousand_function(algorithm1, matrix_A, matrix_B))
-print("thousand times of algorithm 2",time_thousand_function(algorithm2, matrix_A, matrix_B))
-print("thousand times of algorithm 3",time_thousand_function(algorithm3, matrix_A, matrix_B))
+# print("Running time 1")
+# print("thousand times of algorithm 1",time_thousand_function(algorithm1, matrix_A, matrix_B))
+# print("thousand times of algorithm 2",time_thousand_function(algorithm2, matrix_A, matrix_B))
+# print("thousand times of algorithm 3",time_thousand_function(algorithm3, matrix_A, matrix_B))
 
-print("Running time 2")
-print("thousand times of algorithm 1", timeit.timeit(lambda:algorithm1(matrix_A, matrix_B), number=1000))
-print("thousand times of algorithm 2", timeit.timeit(lambda:algorithm2(matrix_A, matrix_B), number=1000))
-print("thousand times of algorithm 3", timeit.timeit(lambda:algorithm3(matrix_A, matrix_B), number=1000))
+# print("Running time 2")
+# print("thousand times of algorithm 1", timeit.timeit(lambda:algorithm1(matrix_A, matrix_B), number=1000))
+# print("thousand times of algorithm 2", timeit.timeit(lambda:algorithm2(matrix_A, matrix_B), number=1000))
+# print("thousand times of algorithm 3", timeit.timeit(lambda:algorithm3(matrix_A, matrix_B), number=1000))
 
-print("Running time 3")
-print("thousand times of algorithm 1", timeit.timeit(lambda:algorithm1(matrix_A, matrix_B), number=1000))
-print("thousand times of algorithm 2", timeit.timeit(lambda:algorithm2(matrix_A, matrix_B), number=1000))
-print("thousand times of algorithm 3", timeit.timeit(lambda:algorithm3(matrix_A, matrix_B), number=1000))
+# print("Running time 3")
+# print("thousand times of algorithm 1", timeit.timeit(lambda:algorithm1(matrix_A, matrix_B), number=1000))
+# print("thousand times of algorithm 2", timeit.timeit(lambda:algorithm2(matrix_A, matrix_B), number=1000))
+# print("thousand times of algorithm 3", timeit.timeit(lambda:algorithm3(matrix_A, matrix_B), number=1000))
 
 
 
