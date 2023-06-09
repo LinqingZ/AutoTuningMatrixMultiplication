@@ -4,13 +4,17 @@ import torch
 from algorithms.hipblas_algo import hipblas_algorithm1, hipblas_algorithm2, hipblas_algorithm3
 from algorithms.numpy_algo import numpy_algorithm1, numpy_algorithm2, numpy_algorithm3
 from client.client import GemmDescriptor
-from internal.profiler import Profiler
-from internal.stateful_optimizer import StatefulOptimizer
 
 
-class GemmStatus: # after execution of GEMM what will return?
-    def __init__(self) -> None:
-        pass
+class GemmStatus: # return if the calculation is success or not
+    def __init__(self, success, calculate_result = None) -> None: # how do I return it? as succes or not?
+        self.success = success
+        self.calculate_result = calculate_result
+        if self.success:
+            print("Calculation was successful!")
+            print("Result:", self.calculate_result)
+        else:
+            print("Calculation failed.")
 
 class GemmProvider(ABC):
     def __init__(self):
@@ -37,7 +41,11 @@ class NumPyGemmProvider(GemmProvider):
         return numpy_algorithm
     
     def execute_gemm(self, tensor_a: Tensor, tensor_b: Tensor, tensor_c: Tensor,  gemm_descriptor: GemmDescriptor, gemm_impl: int) -> GemmStatus:
-        return gemm_impl(tensor_a, tensor_b, tensor_c, gemm_descriptor)
+        try:
+            result = gemm_impl(tensor_a, tensor_b, tensor_c, gemm_descriptor)
+            return GemmStatus(success=True, calculate_result = result)
+        except Exception:
+            return GemmStatus(success=False)
 
 class HipblasGemmProvider(GemmProvider):
     def __init__(self):
@@ -52,22 +60,11 @@ class HipblasGemmProvider(GemmProvider):
         return hipblas_algorithm
     
     def execute_gemm(self, tensor_a: Tensor, tensor_b: Tensor, tensor_c: Tensor,  gemm_descriptor: GemmDescriptor, gemm_impl: int) -> GemmStatus:
-        # implement me
-        return gemm_impl(tensor_a, tensor_b, tensor_c, gemm_descriptor)
+        try:
+            result = gemm_impl(tensor_a, tensor_b, tensor_c, gemm_descriptor)
+            return GemmStatus(success=True, calculate_result = result)
+        except Exception:
+            return GemmStatus(success=False)
         
 
 
-class AutotunedGemm(object):
-    def __init__(self):
-        self.optimizer = StatefulOptimizer()
-        self.profiler = Profiler()
-        self.provider = GemmProvider.HipblasGemmProvider()
-        
-    def optimized_gemm(self, tensor_a: Tensor, tensor_b: Tensor, tensor_c: Tensor, gemm_descriptor: GemmDescriptor):
-        impl = self.optimizer.get_best_gemm_impl(gemm_descriptor)
-        if impl is None:
-            profile_results = self.profiler.profile_instances(gemm_descriptor, self.provider)
-            self.optimizer.persist_profile_results(gemm_descriptor)
-            impl = self.optimizer.get_best_gemm_impl(gemm_descriptor)
-        
-        return self.provider.execute_gemm(tensor_a, tensor_b, tensor_c, gemm_descriptor, impl)

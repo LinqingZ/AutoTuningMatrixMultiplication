@@ -1,7 +1,7 @@
 import itertools
 import torch
 import random
-
+# from client.client import ProfilingResult
 
 
 def generate_matrices():
@@ -17,15 +17,14 @@ def generate_matrices():
 
     for i, j in itertools.product(range(n), range(k)):
         matrix_B[i][j] = random.randint(1, 100)
-    
-    return matrix_A, matrix_B, matrix_C, m, n, k
+    stride_a, stride_b, stride_c, op_a, op_b = 1, 1, 1, 0, 0
+    return matrix_A, matrix_B, matrix_C, m, n, k, stride_a, stride_b, stride_c, op_a, op_b
 
-def main():
-    matrix_A, matrix_B, matrix_C, m, n, k = generate_matrices()
+if __name__ == "__main__":
+    matrix_A, matrix_B, matrix_C, m, n, k, stride_a, stride_b, stride_c, op_a, op_b = generate_matrices()
     print("matrix_A", matrix_A)
     print("matrix_B", matrix_B)
     print("matrix_C", matrix_C)
-
-
-if __name__ == "__main__":
-    main()
+    # client_input = ProfilingResult()
+    # print(client_input.profiling_results)
+    # still need to figure out how run the file and workflow
