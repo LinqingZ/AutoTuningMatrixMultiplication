@@ -1,6 +1,5 @@
 from enum import Enum
 from dataclasses import dataclass
-from typing import Dict, List, Tuple
 from torch import Tensor
 
 def TransposeOp(Enum):
@@ -9,18 +8,24 @@ def TransposeOp(Enum):
 
 @dataclass # GemmDescriptor is description of each GEMM algorithm in order to collect the algorithm data after it runs
 class GemmDescriptor: # GemmDescriptor is a value will be consider to select a algorithm
-    M: int # number of rows in the first matrix (often referred to as matrix A)
-    N: int # number of columns in the first matrix (the same as the number of rows in the second matrix)
-    K: int # number of columns in the second matrix (often referred to as matrix B)
+    m: int # number of rows in the first matrix (often referred to as matrix A)
+    n: int # number of columns in the first matrix (the same as the number of rows in the second matrix)
+    k: int # number of columns in the second matrix (often referred to as matrix B)
     stride_a: int
     stride_b: int
     stride_c: int
     op_a: TransposeOp
     op_b: TransposeOp
 
-class GemmOpInstance: # refering to class GemmInstance in HipBLAS API
-    pass
-    # # how can I store this and use? what will the opertaion istance could be use
+class GemmOpInstance:
+    def __init__(self, algorithm_name, result, runtime) -> None:
+        self.algorithm_name = algorithm_name
+        self.result = result
+        self.runtime = runtime
+    # what else should be on this GemmOpInstance?
+    # what is a multiplication instance?
+    # a instance operation
+    # # how can I store this and use? what will the operation istance could be use
     # # what should I returning? instance should be a sub class or GEM provider?
     # name: str
     # operation: str
@@ -29,7 +34,7 @@ class GemmOpInstance: # refering to class GemmInstance in HipBLAS API
 
 class ProfilingResult: # Profile the output of the matrix, and store the value into database?
     gemm_descriptor: GemmDescriptor
-    profiling_results: Dict[GemmOpInstance, float] 
+    profiling_results: dict[GemmOpInstance, float] 
     # here how profiling the result?
     # profile result to client only?
 

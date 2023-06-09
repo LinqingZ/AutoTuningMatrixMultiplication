@@ -1,6 +1,6 @@
 import datetime
 from client.client import GemmDescriptor, ProfilingResult
-from internal.gemm_excutor import GemmProvider
+from internal.gemm_executor import GemmProvider
 
 class Profiler(object):
 	def __init__(self, tensor_a, tensor_b, tensor_c, gemm_descriptor, gemm_impl):
@@ -10,7 +10,7 @@ class Profiler(object):
 		self.gemm_descriptor = gemm_descriptor
 		self.gemm_impl = gemm_impl
 
-	def profile_instances(self, gemm_descriptor: GemmDescriptor, provider: GemmProvider) -> List[Tuple[int, float]]:
+	def profile_instances(self, gemm_descriptor: GemmDescriptor, provider: GemmProvider) -> list[tuple[int, float]]:
     # calculate the a matrix in all the gem
 		result = []
 		for gemm_impl in provider.get_gemm_implementations(gemm_descriptor):
@@ -25,5 +25,6 @@ class Profiler(object):
 			
 		return result
 
-    def get_gemm_performance_info(GemmDescriptor) -> ProfilingResult:
-        pass
+    def get_gemm_performance_info(self, GemmDescriptor) -> ProfilingResult:
+        return ProfilingResult(GemmDescriptor)
+    # what does this one give out?

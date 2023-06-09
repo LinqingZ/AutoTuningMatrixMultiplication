@@ -21,17 +21,21 @@ def generate_random_matrices(rows, columns):
 matrix_A, matrix_B = generate_random_matrices(10, 10)
 
 def algorithm1(x, y):
+    x = x.numpy()
+    y = y.numpy()
     return np.dot(x, y)
 
 def algorithm2(x, y):
+    x = x.numpy()
+    y = y.numpy()
     return np.matmul(x, y)
 
 def algorithm3(x, y):
     if isinstance(x, np.matrix) and isinstance(y, np.matrix):
         return x*y
     try:
-        x = np.mat(x)
-        y = np.mat(y)
+        x = np.mat(x.numpy())
+        y = np.mat(y.numpy())
         return x*y
     except Exception:
         return None
