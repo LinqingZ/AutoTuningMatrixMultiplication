@@ -1,24 +1,8 @@
 import datetime
 from torch import Tensor
-from client.client import GemmDescriptor
+
+from client import GemmDescriptor
 from internal.gemm_executor import GemmProvider
-from internal.stateful_optimizer import StatefulOptimizer
-
-
-class AutotunedGemm(object):
-    def __init__(self):
-        self.optimizer = StatefulOptimizer()
-        self.profiler = Profiler()
-        self.provider = GemmProvider.HipblasGemmProvider()
-        
-    def optimized_gemm(self, tensor_a: Tensor, tensor_b: Tensor, tensor_c: Tensor, gemm_descriptor: GemmDescriptor):
-        impl = self.optimizer.get_best_gemm_impl(gemm_descriptor) # check if the database has a same matrix size as the input matrix
-        if impl is None:
-            profile_results = self.profiler.profile_instances(gemm_descriptor, self.provider)
-            self.optimizer.persist_profile_results(gemm_descriptor, profile_results) # store profile result into database
-            impl = self.optimizer.get_best_gemm_impl(gemm_descriptor) # after run all the matrix algorithm, find the fastest algorithm searching on the database
-        
-        return self.provider.execute_gemm(tensor_a, tensor_b, tensor_c, gemm_descriptor, impl)
 
 class Profiler(object):
 	def __init__(self, tensor_a, tensor_b, tensor_c, gemm_descriptor, gemm_impl):

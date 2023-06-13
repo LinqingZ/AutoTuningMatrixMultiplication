@@ -1,4 +1,5 @@
-from client.client import GemmDescriptor, GemmOpInstance, ProfilingResult
+from client import GemmDescriptor
+
 
 class StatefulOptimizer(object):
 	def __init__(self):
